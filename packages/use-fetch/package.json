@@ -1,0 +1,14 @@
+{
+  "name": "@warren-bank/react-hook-use-fetch",
+  "version": "01.00.00",
+  "main": "hook/use-fetch.js",
+  "description": "useFetch() with automatic abort on URL change",
+  "author": "Warren Bank (https://github.com/warren-bank)",
+  "license": "GPL-2.0",
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/warren-bank/react-custom-hooks/tree/master/packages/use-fetch"
+  }
+}

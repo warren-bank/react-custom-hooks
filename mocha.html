@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+
+    <!-- only needed to transpile JSX, which tests don't currently use
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    -->
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+    <script>
+      {
+        window.require = (module) => {
+          switch (module) {
+            case '@warren-bank/react-hook-use-fetch':
+              return window.useFetch
+            case 'react':
+              return window.React
+            case 'react-dom':
+              return window.ReactDOM
+            case 'expect':
+              return window.chai.expect
+            default:
+              return null
+          }
+        }
+
+        window.module  = {
+          set exports(value) {
+            if ((typeof value === 'function') && value.name) {
+              window[value.name] = value
+            }
+          }
+        }
+      }
+    </script>
+    <script src="packages/use-fetch/hook/use-fetch.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd')
+      mocha.checkLeaks()
+    </script>
+    <script src="tests/packages/use-fetch/01.js"></script>
+    <script src="tests/packages/use-fetch/02.js"></script>
+    <script src="tests/packages/use-fetch/03.js"></script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
+
+<!--
+https://mochajs.org/#running-mocha-in-the-browser
+https://babeljs.io/setup
+https://reactjs.org/docs/cdn-links.html
+-->
