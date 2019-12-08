@@ -38,7 +38,7 @@
         }
       }
     </script>
-    <script src="packages/use-fetch/hook/use-fetch.js"></script>
+    <script src="../hook/use-fetch.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
@@ -50,9 +50,9 @@
       mocha.setup('bdd')
       mocha.checkLeaks()
     </script>
-    <script src="tests/packages/use-fetch/01.js"></script>
-    <script src="tests/packages/use-fetch/02.js"></script>
-    <script src="tests/packages/use-fetch/03.js"></script>
+    <script src="spec/01.js"></script>
+    <script src="spec/02.js"></script>
+    <script src="spec/03.js"></script>
     <script class="mocha-exec">
       mocha.run();
     </script>

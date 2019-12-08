@@ -29,7 +29,7 @@
         }
       }
     </script>
-    <script src="../../../packages/use-fetch/hook/use-fetch.js"></script>
+    <script src="../hook/use-fetch.js"></script>
   </head>
   <body>
     <div id="root"></div>
@@ -38,7 +38,7 @@
 {
   const getUrl = (nonce) => `https://postman-echo.com/response-headers?access-control-allow-origin=*&nonce=${nonce}`
 
-  let Component = () => {
+  const Component = () => {
     const [nonce,  setNonce ]                          = React.useState(0)
     const [url,    setUrl   ]                          = React.useState(null)
     const [output, setOutput]                          = React.useState([])
@@ -88,9 +88,7 @@
     )
   }
 
-  Component = React.createElement(Component)
-
-  ReactDOM.render(Component, document.getElementById('root'))
+  ReactDOM.render(<Component />, document.getElementById('root'))
 }
     </script>
   </body>
