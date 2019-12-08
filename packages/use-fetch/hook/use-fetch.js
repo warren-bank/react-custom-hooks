@@ -1,7 +1,4 @@
 /*
- * https://reactjs.org/docs/hooks-faq.html#how-to-test-components-that-use-hooks
- * https://mochajs.org/
- *
  * https://www.robinwieruch.de/react-hooks-fetch-data
  * https://developers.google.com/web/updates/2017/09/abortable-fetch
  */
@@ -46,6 +43,11 @@ const useFetch = (url) => {
     let didCancel, request, doAbort, response
 
     didCancel = false
+
+    if (!url) {
+      dispatch({type: 'INIT', payload: {}})
+      return
+    }
 
     if (window.AbortController && window.Request) {
       const controller = new AbortController()

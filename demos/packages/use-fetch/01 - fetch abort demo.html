@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fetch abort demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+    <script>
+      {
+        window.require = (module) => {
+          switch (module) {
+            case 'react':
+              return window.React
+            default:
+              return null
+          }
+        }
+
+        window.module  = {
+          set exports(value) {
+            if ((typeof value === 'function') && value.name) {
+              window[value.name] = value
+            }
+          }
+        }
+      }
+    </script>
+    <script src="../../../packages/use-fetch/hook/use-fetch.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+{
+  const getUrl = (nonce) => `https://postman-echo.com/response-headers?access-control-allow-origin=*&nonce=${nonce}`
+
+  let Component = () => {
+    const [nonce,  setNonce ]                          = React.useState(0)
+    const [url,    setUrl   ]                          = React.useState(null)
+    const [output, setOutput]                          = React.useState([])
+    const {isLoading, isAborted, error, data, doAbort} = useFetch(url)
+
+    React.useEffect(() => {
+      if (isAborted) {
+        setOutput(val => [...val, 'Fetch aborted'])
+      }
+    }, [isAborted])
+
+    React.useEffect(() => {
+      if (error) {
+        setOutput(val => [...val, `Error: ${error.message}`])
+      }
+    }, [error])
+
+    React.useEffect(() => {
+      if (data) {
+        setOutput(val => [...val, data])
+        setNonce( val => val + 1)
+      }
+    }, [data])
+
+    React.useEffect(() => {
+      if (data) {
+        setUrl(getUrl(nonce))
+      }
+    }, [nonce])
+
+    const onStartCallback = React.useCallback(() => {
+      setUrl(getUrl(nonce))
+    }, [nonce])
+
+    const onAbortCallback = React.useCallback(() => {
+      doAbort()
+      setUrl(null)
+    }, [doAbort])
+
+    return (
+      <>
+        <h1>Fetch abort demo</h1>
+        <button onClick={onStartCallback} disabled={ isLoading}>Start fetching</button>
+        <button onClick={onAbortCallback} disabled={!isLoading}>Abort fetching</button>
+        <pre>{output.join("\n")}</pre>
+      </>
+    )
+  }
+
+  Component = React.createElement(Component)
+
+  ReactDOM.render(Component, document.getElementById('root'))
+}
+    </script>
+  </body>
+</html>
+
+<!--
+Based on:
+  https://fetch-abort-demo.glitch.me/
+
+Dependencies:
+  https://babeljs.io/setup
+  https://reactjs.org/docs/cdn-links.html
+-->
