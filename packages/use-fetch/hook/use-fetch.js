@@ -3,7 +3,7 @@
  * https://developers.google.com/web/updates/2017/09/abortable-fetch
  */
 
-const {useReducer, useEffect} = require('react')
+const {useReducer, useEffect, useRef} = require('react')
 
 const initial_state = {
   isLoading: false,
@@ -25,8 +25,10 @@ const dataFetchReducer = (state, action) => {
     case 'ABORT':
       if (state.isAborted)
         return state
-      else
+      else if (state.isLoading)
         return {...initial_state, doAbort: noop, ...action.payload}
+      else
+        return {...initial_state, doAbort: noop}
     case 'SUCCESS':
       return {...initial_state, doAbort: noop, ...action.payload}
     case 'ERROR':
@@ -37,10 +39,12 @@ const dataFetchReducer = (state, action) => {
 }
 
 const useFetch = (url) => {
-  const [state, dispatch] = useReducer(dataFetchReducer, initial_state)
+  const [state, realDispatch] = useReducer(dataFetchReducer, {...initial_state})
+
+  const [dispatch, cancelPendingDispatches] = useNextTick(realDispatch)
 
   useEffect(() => {
-    let didCancel, request, doAbort, response
+    let didCancel, controller, request, doAbort, response
 
     didCancel = false
 
@@ -50,31 +54,30 @@ const useFetch = (url) => {
     }
 
     if (window.AbortController && window.Request) {
-      const controller = new AbortController()
-      const signal = controller.signal
-      request = new Request(url, {signal})
-
-      doAbort = () => {
-        controller.abort()
-        didCancel = true
-        dispatch({type: 'ABORT', payload: {isAborted: true}})
-      }
+      controller = new AbortController()
+      request    = new Request(url, {signal: controller.signal})
     }
     else {
-      request = url
-      doAbort = () => {
-        didCancel = true
-        dispatch({type: 'ABORT', payload: {isAborted: true}})
-      }
+      controller = null
+      request    = url
+    }
+
+    doAbort = () => {
+      if (controller)
+        controller.abort()
+      didCancel = true
+      cancelPendingDispatches()
+      dispatch({type: 'ABORT', payload: {isAborted: true}})
     }
 
     dispatch({type: 'INIT', payload: {isLoading: true, doAbort}})
 
     const fetchData = async () => {
       try {
-        response = await fetch(request)
-        response = await response.text()
-
+        if (!didCancel)
+          response = await fetch(request)
+        if (!didCancel)
+          response = await response.text()
         if (!didCancel)
           dispatch({type: 'SUCCESS', payload: {data: response}})
       }
@@ -93,6 +96,30 @@ const useFetch = (url) => {
   }, [url])
 
   return state
+}
+
+const useNextTick = (fn) => {
+  const timers = useRef([])
+
+  const startTimer  = (...args) => {
+    timers.current.push(
+      setTimeout(
+        () => {fn(...args)},
+        0
+      )
+    )
+  }
+
+  const cancelPreviousTimers = () => {
+    let timer
+
+    while (timers.current.length) {
+      timer = timers.current.pop()
+      clearTimeout(timer)
+    }
+  }
+
+  return [startTimer, cancelPreviousTimers]
 }
 
 module.exports = useFetch
