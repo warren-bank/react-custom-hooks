@@ -30,18 +30,9 @@
       // 'redux-react-hook' exports by: exports[name]=value
       // '@warren-bank/react-hook-unified-redux-react' exports by: module.exports={key1, key2, ...}
 
-      window.module = {exports: {}}
-      window.exports = {}
+      window.exports    = {}
+      window.module     = {exports: {}}
       window.components = {}
-
-      // 'redux-react-hook' workaround
-      {
-        let dp = Object.defineProperty
-        Object.defineProperty = (obj, prop, descriptor) => {
-          if (typeof obj !== 'object') return
-          dp(obj, prop, descriptor)
-        }
-      }
     </script>
     <script src="https://unpkg.com/redux-react-hook@4/dist/index.js"></script>
     <script src="../hook/unified-redux-react-hook.js"></script>

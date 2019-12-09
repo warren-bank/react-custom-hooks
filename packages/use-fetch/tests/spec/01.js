@@ -1,7 +1,7 @@
 /*
-   * https://www.robinwieruch.de/react-hooks-fetch-data
-   * https://developers.google.com/web/updates/2017/09/abortable-fetch
-   */
+ * https://www.robinwieruch.de/react-hooks-fetch-data
+ * https://developers.google.com/web/updates/2017/09/abortable-fetch
+ */
 
 {
   const useFetch = require('@warren-bank/react-hook-use-fetch')

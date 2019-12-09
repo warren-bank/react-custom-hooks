@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha@6/mocha.css" />
+
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/redux@4/dist/redux.min.js"></script>
+    <script>
+      window.require = (module) => {
+        switch (module) {
+          case 'expect':
+            return window.chai.expect
+          case 'jsxdirect':
+            return window.jsxdirect
+          case 'redux':
+            return window.Redux
+          case 'react':
+            return window.React
+          case 'react-dom':
+            return window.ReactDOM
+          case 'redux-react-hook':
+            return {...window.exports}
+          case '@warren-bank/react-hook-unified-redux-react':
+            return {...window['@warren-bank/react-hook-unified-redux-react']}
+          default:
+            return null
+        }
+      }
+
+      // 'mocha' exports by: window[name]=value
+      // 'chai' exports by: module.exports=chai
+      // '@warren-bank/react-hook-unified-redux-react' exports by: module.exports={key1, key2, ...}
+      // 'redux-react-hook' exports by: exports[name]=value
+
+      window.exports = {}
+
+      window.module  = {
+        set exports(value) {
+          if ((typeof value === 'function') && value.name) {
+            window[value.name] = value
+          }
+          if (typeof value === 'object') {
+            if (value.expect)
+              window['chai'] = value
+            else if (value.useReduxDispatch)
+              window['@warren-bank/react-hook-unified-redux-react'] = value
+            else
+              alert(JSON.stringify(value))
+          }
+        }
+      }
+    </script>
+    <script src="https://unpkg.com/redux-react-hook@4/dist/index.js"></script>
+    <script src="../hook/unified-redux-react-hook.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="https://unpkg.com/chai@4/chai.js"></script>
+    <script src="https://unpkg.com/mocha@6/mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd')
+      mocha.checkLeaks()
+    </script>
+    <script src="spec/01.js"></script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
+
+<!--
+References:
+  https://mochajs.org/#running-mocha-in-the-browser
+
+Dependencies:
+  https://unpkg.com/browse/mocha@6.2.2/
+  https://unpkg.com/browse/chai@4.2.0/
+  https://unpkg.com/browse/react@16.12.0/umd/
+  https://unpkg.com/browse/react-dom@16.12.0/umd/
+  https://unpkg.com/browse/redux@4.0.4/dist/
+  https://unpkg.com/browse/redux-react-hook@4.0.1/dist/
+-->
