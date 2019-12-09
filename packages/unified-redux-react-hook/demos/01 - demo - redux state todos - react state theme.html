@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>unified-redux-react-hook demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/redux@4/dist/redux.min.js"></script>
+    <script>
+      window.require = (module) => {
+        switch (module) {
+          case 'redux':
+            return window.Redux
+          case 'react':
+            return window.React
+          case 'react-dom':
+            return window.ReactDOM
+          case 'redux-react-hook':
+            return {...window.exports}
+          case '@warren-bank/react-hook-unified-redux-react':
+            return {...window.module.exports}
+          default:
+            return null
+        }
+      }
+
+      // 'redux-react-hook' exports by: exports[name]=value
+      // '@warren-bank/react-hook-unified-redux-react' exports by: module.exports={key1, key2, ...}
+
+      window.module = {exports: {}}
+      window.exports = {}
+      window.components = {}
+
+      // 'redux-react-hook' workaround
+      {
+        let dp = Object.defineProperty
+        Object.defineProperty = (obj, prop, descriptor) => {
+          if (typeof obj !== 'object') return
+          dp(obj, prop, descriptor)
+        }
+      }
+    </script>
+    <script src="https://unpkg.com/redux-react-hook@4/dist/index.js"></script>
+    <script src="../hook/unified-redux-react-hook.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+// =================================================================================================
+{
+  const {useDispatch} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+
+  const SiteSettings = () => {
+    const unifiedDispatcher = useDispatch()
+
+    const changeTheme = (mode) => {
+      unifiedDispatcher({type: 'REACT_STORE', payload: mode})
+    }
+
+    return (
+      <>
+        <h3>Site Settings</h3>
+        <div>
+          <span>Change Theme: </span>
+          <button value="dark"  onClick={e => changeTheme(e.target.value)}>Dark</button>
+          <button value="light" onClick={e => changeTheme(e.target.value)}>Light</button>
+        </div>
+      </>
+    )
+  }
+
+  window.components.SiteSettings = SiteSettings
+}
+// =================================================================================================
+{
+  const {useMappedState} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+
+  const ToDoList = () => {
+    const todos = useMappedState(reduxState => reduxState.todos)
+
+    return (
+      <>
+        <h3>To Dos:</h3>
+        <ul>
+          {todos.map(todo => (<li>{todo}</li>))}
+        </ul>
+      </>
+    )
+  }
+
+  window.components.ToDoList = ToDoList
+}
+// =================================================================================================
+{
+  const {useReducer, useState, useCallback} = require('react')
+  const {useDispatch}  = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const SiteSettings   = window.components.SiteSettings
+  const ToDoList       = window.components.ToDoList
+
+  const reactThemes = {
+    light: {
+      padding:         "20px",
+      backgroundColor: "#eeeeee",
+      color:           "#000000"
+    },
+    dark: {
+      padding:         "20px",
+      backgroundColor: "#222222",
+      color:           "#ffffff"
+    }
+  }
+  const reactInitialState = reactThemes.light
+  const reactReducer = (state, action) => {
+    switch (action.type) {
+      case 'REACT_STORE':
+        return reactThemes[action.payload]
+      default:
+        return state
+    }
+  }
+
+  const App = () => {
+    const [reactState, reactDispatcher] = useReducer(reactReducer, reactInitialState)
+    const unifiedDispatcher             = useDispatch(reactDispatcher)
+
+    const [text, updateText] = useState('')
+
+    const handleChange = useCallback((e) => {
+      updateText(e.target.value)
+    }, [])
+
+    const handleSubmit = useCallback((e) => {
+      e.preventDefault()
+
+      if (text) {
+        unifiedDispatcher({type: 'REDUX_STORE', payload: text})
+        updateText('')
+      }
+    }, [text])
+
+    return (
+      <div style={reactState}>
+        <header>
+          <SiteSettings />
+        </header>
+        <main>
+          <ToDoList />
+        </main>
+        <footer>
+          <form onSubmit={handleSubmit}>
+            <input value={text}  onChange={handleChange} />
+            <input type="submit" value="Add" />
+          </form>
+        </footer>
+      </div>
+    )
+  }
+
+  window.components.App = App
+}
+// =================================================================================================
+{
+  const {createStore}  = require('redux')
+  const ReactDOM       = require('react-dom')
+  const {StoreContext} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const App            = window.components.App
+
+  const reduxInitialState = {todos: ['foo','bar','baz']}
+  const reduxReducer = (state = reduxInitialState, action) => {
+    switch (action.type) {
+      case 'REDUX_STORE':
+        return {todos: [...state.todos, action.payload]}
+      default:
+        return state
+    }
+  }
+  const reduxStore = createStore(reduxReducer)
+
+  ReactDOM.render(
+    <StoreContext.Provider value={reduxStore}>
+      <App />
+    </StoreContext.Provider>,
+    document.getElementById('root')
+  )
+}
+// =================================================================================================
+    </script>
+  </body>
+</html>
+
+<!--
+Dependencies:
+  https://unpkg.com/browse/@babel/standalone@7.7.6/
+  https://unpkg.com/browse/react@16.12.0/umd/
+  https://unpkg.com/browse/react-dom@16.12.0/umd/
+  https://unpkg.com/browse/redux@4.0.4/dist/
+  https://unpkg.com/browse/redux-react-hook@4.0.1/dist/
+-->
