@@ -105,6 +105,14 @@ npm install --save '@warren-bank/unified-redux-react-hook'
   - note:
     * alias for: `require('redux-react-hook').StoreContext`
 
+#### Demos:
+
+1. [very basic example](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme.html)
+   * _Redux_ state stores 'todos'
+   * _React_ state stores 'theme'
+     - the reducer's dispatch is added to the unified dispatcher
+     - the unified dispatcher is called by a different component to mutate the state of the component that owns the reducer
+
 #### References:
 
 * `npm install `[`'redux-react-hook'`](https://github.com/facebookincubator/redux-react-hook)
