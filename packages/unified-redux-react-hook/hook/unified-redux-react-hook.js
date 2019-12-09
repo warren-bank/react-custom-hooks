@@ -37,6 +37,8 @@ const unifiedDispatcher = (action) => {
 }
 
 const useDispatch = (...newReactDispatchers) => {
+  reduxDispatcher = useReduxDispatch()
+
   useEffect(() => {
     if (!newReactDispatchers || !newReactDispatchers.length)
       return
@@ -52,9 +54,6 @@ const useDispatch = (...newReactDispatchers) => {
     onMount()
     return onDismount
   }, newReactDispatchers)
-
-  if (!reduxDispatcher)
-    reduxDispatcher = useReduxDispatch()
 
   return unifiedDispatcher
 }
