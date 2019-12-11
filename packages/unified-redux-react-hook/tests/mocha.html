@@ -24,8 +24,8 @@
             return window.ReactDOM
           case 'redux-react-hook':
             return {...window.exports}
-          case '@warren-bank/react-hook-unified-redux-react':
-            return {...window['@warren-bank/react-hook-unified-redux-react']}
+          case '@warren-bank/unified-redux-react-hook':
+            return {...window['@warren-bank/unified-redux-react-hook']}
           default:
             return null
         }
@@ -33,7 +33,7 @@
 
       // 'mocha' exports by: window[name]=value
       // 'chai' exports by: module.exports=chai
-      // '@warren-bank/react-hook-unified-redux-react' exports by: module.exports={key1, key2, ...}
+      // '@warren-bank/unified-redux-react-hook' exports by: module.exports={key1, key2, ...}
       // 'redux-react-hook' exports by: exports[name]=value
 
       window.exports = {}
@@ -47,7 +47,7 @@
             if (value.expect)
               window['chai'] = value
             else if (value.useReduxDispatch)
-              window['@warren-bank/react-hook-unified-redux-react'] = value
+              window['@warren-bank/unified-redux-react-hook'] = value
             else
               alert(JSON.stringify(value))
           }
