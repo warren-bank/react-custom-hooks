@@ -1,0 +1,33 @@
+{
+  "name": "@warren-bank/do-not-publish",
+  "private": true,
+  "version": "1.0.0",
+  "main": "",
+  "description": "Use 'webpack' to combine all source files into a single bundle. Use 'babel' to transpile to ES5 syntax.",
+  "author": {
+    "name": "Warren R. Bank",
+    "email": "warren.r.bank@gmail.com",
+    "url": "https://github.com/warren-bank"
+  },
+  "license": "GPL-2.0",
+  "scripts": {
+    "postinstall": "link-parent-bin -c ./2-demos",
+    "build": "cd 1-library-bundle && npm run build"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "link-parent-bin": "^1.0.2",
+    "terser-webpack-plugin": "^2.2.2",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/warren-bank/react-custom-hooks/tree/master/packages/unified-redux-react-hook"
+  }
+}

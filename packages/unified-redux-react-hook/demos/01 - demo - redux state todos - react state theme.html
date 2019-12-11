@@ -20,7 +20,7 @@
             return window.ReactDOM
           case 'redux-react-hook':
             return {...window.exports}
-          case '@warren-bank/react-hook-unified-redux-react':
+          case '@warren-bank/unified-redux-react-hook':
             return {...window.module.exports}
           default:
             return null
@@ -28,7 +28,7 @@
       }
 
       // 'redux-react-hook' exports by: exports[name]=value
-      // '@warren-bank/react-hook-unified-redux-react' exports by: module.exports={key1, key2, ...}
+      // '@warren-bank/unified-redux-react-hook' exports by: module.exports={key1, key2, ...}
 
       window.exports    = {}
       window.module     = {exports: {}}
@@ -43,7 +43,7 @@
     <script type="text/babel">
 // =================================================================================================
 {
-  const {useDispatch} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useDispatch} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
 
   const SiteSettings = () => {
     const unifiedDispatcher = useDispatch()
@@ -68,7 +68,7 @@
 }
 // =================================================================================================
 {
-  const {useMappedState} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useMappedState} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
 
   const ToDoList = () => {
     const todos = useMappedState(reduxState => reduxState.todos)
@@ -88,7 +88,7 @@
 // =================================================================================================
 {
   const {useReducer, useState, useCallback} = require('react')
-  const {useDispatch}  = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useDispatch}  = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
   const SiteSettings   = window.components.SiteSettings
   const ToDoList       = window.components.ToDoList
 
@@ -157,7 +157,7 @@
 {
   const {createStore}  = require('redux')
   const ReactDOM       = require('react-dom')
-  const {StoreContext} = require('@warren-bank/react-hook-unified-redux-react')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {StoreContext} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
   const App            = window.components.App
 
   const reduxInitialState = {todos: ['foo','bar','baz']}

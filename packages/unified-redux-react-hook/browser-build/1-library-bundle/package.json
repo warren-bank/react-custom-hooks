@@ -1,17 +1,19 @@
 {
-  "name": "@warren-bank/unified-redux-react-hook",
-  "version": "01.00.02",
-  "main": "hook/unified-redux-react-hook.js",
-  "description": "React custom hooks that enhance 'redux-react-hook' to unify Redux and React 'dispatch' methods with a common API.",
+  "name": "@warren-bank/do-not-publish",
+  "private": true,
+  "version": "1.0.0",
+  "main": "",
+  "description": "library-bundle",
   "author": {
     "name": "Warren R. Bank",
     "email": "warren.r.bank@gmail.com",
     "url": "https://github.com/warren-bank"
   },
   "license": "GPL-2.0",
+  "scripts": {
+    "build": "webpack"
+  },
   "dependencies": {
-    "react": "^16.12.0",
-    "redux-react-hook": "^4.0.1"
   },
   "devDependencies": {
   },
