@@ -21,6 +21,7 @@ npm install --save '@warren-bank/unified-redux-react-hook'
   // make context containing Redux store the root component in React hierarchy
 
   const {createStore}  = require('redux')
+  const React          = require('react')
   const ReactDOM       = require('react-dom')
   const {StoreContext} = require('@warren-bank/unified-redux-react-hook')
 
@@ -107,11 +108,15 @@ npm install --save '@warren-bank/unified-redux-react-hook'
 
 #### Demos:
 
-1. [very basic example](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme.html)
-   * _Redux_ state stores 'todos'
-   * _React_ state stores 'theme'
-     - the reducer's dispatch is added to the unified dispatcher
-     - the unified dispatcher is called by a different component to mutate the state of the component that owns the reducer
+1. very basic example
+   * design
+     * _Redux_ state stores 'todos'
+     * _React_ state stores 'theme'
+       - the reducer's dispatch is added to the unified dispatcher
+       - the unified dispatcher is called by a different component to mutate the state of the component that owns the reducer
+   * implementations
+     * [Babel standalone](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme.html)
+     * [Webpack browser-build bundle](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/browser-build/2-demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme/dist/index.html)
 
 #### References:
 
