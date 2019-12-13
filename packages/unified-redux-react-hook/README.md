@@ -2,10 +2,14 @@
 
 React custom hooks that enhance ['redux-react-hook'](https://github.com/facebookincubator/redux-react-hook) to unify _Redux_ and _React_ `dispatch` methods with a common API.
 
+- - - -
+
+#### <u>CommonJS module</u>
+
 #### Install:
 
 ```bash
-npm install --save '@warren-bank/unified-redux-react-hook'
+  npm install --save '@warren-bank/unified-redux-react-hook'
 ```
 
 #### Usage:
@@ -56,6 +60,30 @@ npm install --save '@warren-bank/unified-redux-react-hook'
   unifiedDispatcher(action)
 ```
 
+- - - -
+
+#### <u>Browser bundle</u>
+
+#### Install:
+
+```html
+  <!-- dependency: React must be loaded before bundle -->
+  <!-- version:    bundle is obtained from github repo @ tag 'unified-redux-react-hook/v01.00.02' -->
+
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/warren-bank/react-custom-hooks@unified-redux-react-hook%2Fv01.00.02/packages/unified-redux-react-hook/browser-build/1-library-bundle/dist/js/bundle.js"></script>
+```
+
+#### Usage:
+
+```javascript
+  // full list of module exports
+
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState} = window.UnifiedReduxReactHook
+```
+
+- - - -
+
 #### Notes:
 
 * `useDispatch()`
@@ -105,6 +133,8 @@ npm install --save '@warren-bank/unified-redux-react-hook'
       - ie: as output by `React.createContext()`
   - note:
     * alias for: `require('redux-react-hook').StoreContext`
+
+- - - -
 
 #### Demos:
 
