@@ -11,7 +11,7 @@
   },
   "license": "GPL-2.0",
   "scripts": {
-    "postinstall": "link-parent-bin -c ./2-demos",
+    "postinstall": "link-parent-bin -c . && shx --silent rm -r ./2-demos/node_modules && link-parent-bin -c ./2-demos",
     "build": "cd 1-library-bundle && npm run build"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "link-parent-bin": "^1.0.2",
+    "shx": "^0.3.2",
     "terser-webpack-plugin": "^2.2.2",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"

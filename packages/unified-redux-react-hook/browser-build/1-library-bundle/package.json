@@ -11,7 +11,8 @@
   },
   "license": "GPL-2.0",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack && npm run postbuild",
+    "postbuild": "shx --silent rm -r ../../dist && shx --silent mkdir ../../dist && shx --silent cp ./dist/js/bundle.js ../../dist/unified-redux-react-hook.min.js"
   },
   "dependencies": {
   },
