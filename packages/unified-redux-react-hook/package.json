@@ -1,14 +1,18 @@
 {
   "name": "@warren-bank/unified-redux-react-hook",
-  "version": "01.00.03",
+  "version": "01.00.04",
   "main": "hook/unified-redux-react-hook.js",
   "description": "React custom hooks that enhance 'redux-react-hook' to unify Redux and React 'dispatch' methods with a common API.",
   "author": {
-    "name": "Warren R. Bank",
+    "name":  "Warren R. Bank",
     "email": "warren.r.bank@gmail.com",
-    "url": "https://github.com/warren-bank"
+    "url":   "https://github.com/warren-bank"
   },
   "license": "GPL-2.0",
+  "scripts": {
+    "build":   "npm install && cd browser-build && npm install && cd 1-library-bundle && npm install && npm run build && cd \"../2-demos/01 - demo - redux state todos - react state theme\" && npm install && npm run build",
+    "publish": "npm publish --access=public"
+  },
   "dependencies": {
     "react": "^16.12.0",
     "redux-react-hook": "^4.0.1"

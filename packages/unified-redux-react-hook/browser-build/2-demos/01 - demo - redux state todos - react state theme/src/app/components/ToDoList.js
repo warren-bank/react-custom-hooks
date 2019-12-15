@@ -1,8 +1,8 @@
 const React            = require('react')
-const {useMappedState} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+const {useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
 
 const ToDoList = () => {
-  const todos = useMappedState(reduxState => reduxState.todos)
+  const todos = useReduxMappedState(reduxState => reduxState.todos)
 
   return (
     <>

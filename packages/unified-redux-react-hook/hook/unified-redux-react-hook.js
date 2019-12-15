@@ -5,7 +5,7 @@
 
 {
 
-const {StoreContext, useDispatch: useReduxDispatch, useMappedState} = require('redux-react-hook')
+const {StoreContext, useDispatch: useReduxDispatch, useMappedState: useReduxMappedState} = require('redux-react-hook')
 
 const {useEffect} = require('react')
 
@@ -58,6 +58,6 @@ const useDispatch = (...newReactDispatchers) => {
   return unifiedDispatcher
 }
 
-module.exports = {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+module.exports = {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
 
 }

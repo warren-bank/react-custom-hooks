@@ -7,7 +7,7 @@
   const {createStore} = require('redux')
   const React         = require('react')
   const ReactDOM      = require('react-dom')
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState} = require('@warren-bank/unified-redux-react-hook')
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')
 
   // ===============================================================================================
 

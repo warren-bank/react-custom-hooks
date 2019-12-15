@@ -43,7 +43,7 @@
     <script type="text/babel">
 // =================================================================================================
 {
-  const {useDispatch} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useDispatch} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
 
   const SiteSettings = () => {
     const unifiedDispatcher = useDispatch()
@@ -68,10 +68,10 @@
 }
 // =================================================================================================
 {
-  const {useMappedState} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
 
   const ToDoList = () => {
-    const todos = useMappedState(reduxState => reduxState.todos)
+    const todos = useReduxMappedState(reduxState => reduxState.todos)
 
     return (
       <>
@@ -88,7 +88,7 @@
 // =================================================================================================
 {
   const {useReducer, useState, useCallback} = require('react')
-  const {useDispatch}  = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {useDispatch}  = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
   const SiteSettings   = window.components.SiteSettings
   const ToDoList       = window.components.ToDoList
 
@@ -157,7 +157,7 @@
 {
   const {createStore}  = require('redux')
   const ReactDOM       = require('react-dom')
-  const {StoreContext} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState}
+  const {StoreContext} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
   const App            = window.components.App
 
   const reduxInitialState = {todos: ['foo','bar','baz']}

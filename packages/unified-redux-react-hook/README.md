@@ -17,7 +17,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState} = require('@warren-bank/unified-redux-react-hook')
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')
 ```
 
 ```javascript
@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.3', which corresponds to git tag 'unified-redux-react-hook/v01.00.03' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.4', which corresponds to git tag 'unified-redux-react-hook/v01.00.04' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.3/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.4/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:
@@ -79,7 +79,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useMappedState} = window.UnifiedReduxReactHook
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = window.UnifiedReduxReactHook
 ```
 
 - - - -
@@ -119,7 +119,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - note:
     * alias for: `require('redux-react-hook').useDispatch`
 
-* `useMappedState()`
+* `useReduxMappedState()`
   - input:
     * function: `(state) => value`
   - output:
