@@ -17,7 +17,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector} = require('@warren-bank/unified-redux-react-hook')
 ```
 
 ```javascript
@@ -79,7 +79,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = window.UnifiedReduxReactHook
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector} = window.UnifiedReduxReactHook
 ```
 
 - - - -
@@ -126,6 +126,33 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
     * `value`
   - note:
     * alias for: `require('redux-react-hook').useMappedState`
+
+* `useReduxSelector()`
+  - input:
+    * `(...inputSelectors, resultFunc)`
+      - `inputSelectors`
+        * a list of functions or Array(s) of functions
+          - input (to each):
+            * the 1st input parameter to each function is the global Redux state
+            * subsequent input parameters are copied from the user-supplied input when invoked
+          - output (from each):
+            * a derived value that is relatively __inexpensive__ to compute
+      - `resultFunc`
+          - input:
+            * the derived values as output from `inputSelectors`
+          - output:
+            * a derived value that is relatively __expensive__ to compute
+  - output:
+    * a function
+      - when invoked:
+        * any parameters passed into this function will also be passed as input parameters to all `inputSelectors` following the Redux state
+        * all `inputSelectors` are invoked to obtain the corresponding list of derived values
+        * `resultFunc` is invoked
+          - note: `resultFunc` is memoized and only executes when its input parameters change
+  - references:
+    * [Reselect API: `createSelector()` method](https://github.com/reduxjs/reselect#api)
+  - note:
+    * though one or more `inputSelectors` should be considered required,<br>the fallback behavior is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
 
 * `StoreContext`
   - type:

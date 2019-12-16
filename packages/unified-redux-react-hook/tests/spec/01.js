@@ -7,7 +7,7 @@
   const {createStore} = require('redux')
   const React         = require('react')
   const ReactDOM      = require('react-dom')
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState} = require('@warren-bank/unified-redux-react-hook')
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector} = require('@warren-bank/unified-redux-react-hook')
 
   // ===============================================================================================
 
@@ -25,8 +25,8 @@
     useDispatch(dispatch)
 
     return (
-      //<div>child 1: {state.length}</div>
-      React.createElement('div', null, 'child 1: ' + JSON.stringify(state.length))
+      //<div>child 1: processed {state.length} React reducer dispatch actions</div>
+      React.createElement('div', null, 'child 1: processed ' + JSON.stringify(state.length) + ' React reducer dispatch actions')
     )
   }
 
@@ -46,8 +46,8 @@
     useDispatch(dispatch)
 
     return (
-      //<div>child 2: {state.length}</div>
-      React.createElement('div', null, 'child 2: ' + JSON.stringify(state.length))
+      //<div>child 2: processed {state.length} React reducer dispatch actions</div>
+      React.createElement('div', null, 'child 2: processed ' + JSON.stringify(state.length) + ' React reducer dispatch actions')
     )
   }
 
@@ -67,8 +67,8 @@
     useDispatch(dispatch)
 
     return (
-      //<div>child 3: {state.length}</div>
-      React.createElement('div', null, 'child 3: ' + JSON.stringify(state.length))
+      //<div>child 3: processed {state.length} React reducer dispatch actions</div>
+      React.createElement('div', null, 'child 3: processed ' + JSON.stringify(state.length) + ' React reducer dispatch actions')
     )
   }
 
@@ -108,15 +108,16 @@
 
   // ===============================================================================================
 
+  const containerParent = document.getElementById('mocha')
   let container
 
   beforeEach(() => {
     container = document.createElement('div')
-    document.body.appendChild(container)
+    containerParent.appendChild(container)
   })
 
   afterEach(() => {
-    document.body.removeChild(container)
+    containerParent.removeChild(container)
     container = null
   })
 

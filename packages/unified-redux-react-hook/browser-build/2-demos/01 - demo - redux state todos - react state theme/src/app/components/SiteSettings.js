@@ -1,5 +1,5 @@
 const React         = require('react')
-const {useDispatch} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState}
+const {useDispatch} = require('@warren-bank/unified-redux-react-hook')  // {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector}
 
 const SiteSettings = () => {
   const unifiedDispatcher = useDispatch()
