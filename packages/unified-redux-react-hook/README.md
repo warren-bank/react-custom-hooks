@@ -17,7 +17,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector} = require('@warren-bank/unified-redux-react-hook')
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, createReduxSelector} = require('@warren-bank/unified-redux-react-hook')
 ```
 
 ```javascript
@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.4', which corresponds to git tag 'unified-redux-react-hook/v01.00.04' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.5', which corresponds to git tag 'unified-redux-react-hook/v01.00.05' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.4/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.5/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:
@@ -79,7 +79,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 ```javascript
   // full list of module exports
 
-  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector} = window.UnifiedReduxReactHook
+  const {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, createReduxSelector} = window.UnifiedReduxReactHook
 ```
 
 - - - -
@@ -127,7 +127,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - note:
     * alias for: `require('redux-react-hook').useMappedState`
 
-* `useReduxSelector()`
+* `createReduxSelector()`
   - input:
     * `(...inputSelectors, resultFunc)`
       - `inputSelectors`
@@ -151,8 +151,11 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
           - note: `resultFunc` is memoized and only executes when its input parameters change
   - references:
     * [Reselect API: `createSelector()` method](https://github.com/reduxjs/reselect#api)
-  - note:
-    * though one or more `inputSelectors` should be considered required,<br>the fallback behavior is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
+  - notes:
+    * `createReduxSelector()` can be called outside of a React component's render function
+      - however, the function it creates must only be called inside of a React component's render function
+    * though one or more `inputSelectors` should be considered required
+      - the fallback behavior when none are provided<br>is to create a function that is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
 
 * `StoreContext`
   - type:

@@ -58,10 +58,12 @@
     return unifiedDispatcher
   }
 
-  const useReduxSelector = (...selectorFunctions) => {
+  const createReduxSelector = (...selectorFunctions) => {
     // https://github.com/reduxjs/reselect#api
 
-    return (...params) => {
+    const reduxSelectorProperty = 'UnifiedReduxReactHook_ReduxSelector'
+
+    const reduxSelector = (...params) => {
       const args = [...selectorFunctions]
 
       if (!args || !args.length)
@@ -76,10 +78,18 @@
           args.splice((i+1), 0, ...arg)
         }
         else if (typeof arg === 'function') {
-          let inputSelector      = useCallback(state => arg(state, ...params), params)
-          let inputSelectorValue = useReduxMappedState(inputSelector)
+          if (arg.hasOwnProperty(reduxSelectorProperty)) {
+            let inputSelectorValue = arg(...params)
 
-          inputSelectorValues.push(inputSelectorValue)
+            inputSelectorValues.push(inputSelectorValue)
+          }
+          else {
+          //let inputSelector      = useCallback(state => arg(state, ...params), params)  // result is memoized based only on 'params'; needs to run every time it is called in order to inspect 'state'.
+            let inputSelector      = useCallback(state => arg(state, ...params))
+            let inputSelectorValue = useReduxMappedState(inputSelector)
+
+            inputSelectorValues.push(inputSelectorValue)
+          }
         }
         else {
           inputSelectorValues.push(arg)
@@ -95,8 +105,12 @@
       }
       return result
     }
+
+    Object.defineProperty(reduxSelector, reduxSelectorProperty, {enumerable: false, configurable: false, writable: false, value: true})
+
+    return reduxSelector
   }
 
-  module.exports = {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, useReduxSelector}
+  module.exports = {StoreContext, addDispatch, removeDispatch, useDispatch, useReduxDispatch, useReduxMappedState, createReduxSelector}
 
 }
