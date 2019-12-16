@@ -107,7 +107,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 * `removeDispatch()`
   - input:
-    * exactly one React dispatch function, which is equal (by Object comparison) to one that had previously been passed to `addDispatch()`
+    * exactly one React dispatch function, which is equal (by `===` reference equality) to one that had previously been passed to `addDispatch()`
   - output:
     * the count of __all__ registered React functions
 
@@ -154,6 +154,8 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - notes:
     * `createReduxSelector()` can be called outside of a React component's render function
       - however, the function it creates must only be called inside of a React component's render function
+    * same as the default behavior for `require('reselect').createSelector`
+      - reference equality (`===`) is used to determine if the value returned by an input-selector has changed between calls
     * though one or more `inputSelectors` should be considered required
       - the fallback behavior when none are provided<br>is to create a function that is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
 
