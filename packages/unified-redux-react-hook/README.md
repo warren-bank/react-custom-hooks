@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.8', which corresponds to git tag 'unified-redux-react-hook/v01.00.08' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.9', which corresponds to git tag 'unified-redux-react-hook/v01.00.09' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.8/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.9/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:

@@ -110,8 +110,10 @@
             inputSelectorValues.push(inputSelectorValue)
           }
           else {
-          //let inputSelector      = useCallback(state => arg(state, ...params), params)  // result is memoized based only on 'params'; needs to run every time it is called in order to inspect 'state'.
-            let inputSelector      = useCallback(state => arg(state, ...params))
+            // 'inputSelector'      [function]      will remain stable (by reference) until 'params' change.
+            // 'inputSelectorValue' [derived value] is memoized on its 'state' input parameter; 'inputSelector' is only re-run when 'state' changes. The memoized result is returned during render until 'state' changes.
+
+            let inputSelector      = useCallback(state => arg(state, ...params), params)
             let inputSelectorValue = useReduxMappedState(inputSelector)
 
             inputSelectorValues.push(inputSelectorValue)
