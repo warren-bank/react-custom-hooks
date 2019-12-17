@@ -7,7 +7,9 @@
 
   const {StoreContext, useDispatch: useReduxDispatch, useMappedState: useReduxMappedState} = require('redux-react-hook')
 
-  const {useEffect, useCallback, useMemo} = require('react')
+  const fastEqual = require('@warren-bank/fast-equal')
+
+  const {useEffect, useRef, useCallback, useMemo} = require('react')
 
   let reduxDispatcher
 
@@ -63,14 +65,49 @@
 
     const reduxSelectorProperty = 'UnifiedReduxReactHook_ReduxSelector'
 
+    let equal = null
+
+    if (selectorFunctions && selectorFunctions.length) {
+      let lastArg = selectorFunctions[selectorFunctions.length - 1]
+
+      if (typeof lastArg === 'object') {
+        // remove value so it isn't processed within the `reduxSelector` as an `arg`
+        selectorFunctions.pop()
+
+        if (typeof lastArg.equality === 'string') {
+          switch (lastArg.equality.toLowerCase()) {
+            case 'deep':
+              equal = (a, b) => fastEqual(a, b, {shallow: false})
+              break
+            case 'shallow':
+              equal = (a, b) => {
+                // 'a' and 'b' are guaranteed to both be: Arrays, not equal by reference
+                // the user doesn't want to shallow compare 'a' and 'b'
+                // the user does want to shallow compare each element of both Arrays
+                if (a.length !== b.length) return false
+
+                let ok = true
+                for (let i=0; ok && (i < a.length); i++) {
+                  ok = fastEqual(a[i], b[i], {shallow: true})
+                }
+                return ok
+              }
+              break
+          }
+        }
+      }
+    }
+
     const reduxSelector = (...params) => {
       const args = [...selectorFunctions]
 
       if (!args || !args.length)
         return null
 
+      const prevInputSelectorValues = useRef([])
+
       const resultFunc = args.pop()
-      const inputSelectorValues = []
+      let inputSelectorValues = []
 
       for (let i=0; i < args.length; i++) {
         let arg = args[i]
@@ -98,9 +135,23 @@
 
       let result
       if (!inputSelectorValues.length) {
+        if (typeof equal === 'function') {
+          prevInputSelectorValues.current = []
+        }
+
         result = useReduxMappedState(useCallback(resultFunc, []))
       }
       else {
+        if (typeof equal === 'function') {
+          if (equal(prevInputSelectorValues.current, inputSelectorValues)) {
+            // force memoized reference equality
+            inputSelectorValues = prevInputSelectorValues.current
+          }
+          else {
+            prevInputSelectorValues.current = inputSelectorValues
+          }
+        }
+
         result = useMemo(() => resultFunc(...inputSelectorValues), inputSelectorValues)
       }
       return result

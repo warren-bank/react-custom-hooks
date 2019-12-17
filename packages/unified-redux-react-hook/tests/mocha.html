@@ -27,6 +27,8 @@
             return window.ReactDOM
           case 'redux-react-hook':
             return {...window.exports}
+          case '@warren-bank/fast-equal':
+            return window.equal
           case '@warren-bank/unified-redux-react-hook':
             return {...window['@warren-bank/unified-redux-react-hook']}
           default:
@@ -58,6 +60,7 @@
       }
     </script>
     <script src="https://unpkg.com/redux-react-hook@4/dist/index.js"></script>
+    <script src="https://unpkg.com/@warren-bank/fast-equal@3/index.js"></script>
     <script src="../hook/unified-redux-react-hook.js"></script>
   </head>
   <body>

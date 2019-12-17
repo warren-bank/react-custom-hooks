@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.5', which corresponds to git tag 'unified-redux-react-hook/v01.00.05' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.6', which corresponds to git tag 'unified-redux-react-hook/v01.00.06' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.5/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.6/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:
@@ -129,19 +129,30 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 * `createReduxSelector()`
   - input:
-    * `(...inputSelectors, resultFunc)`
+    * `(...inputSelectors, resultFunc, options)`
       - `inputSelectors`
-        * a list of functions or Array(s) of functions
+        * [required] a list of functions or Array(s) of functions
           - input (to each):
             * the 1st input parameter to each function is the global Redux state
             * subsequent input parameters are copied from the user-supplied input when invoked
           - output (from each):
             * a derived value that is relatively __inexpensive__ to compute
       - `resultFunc`
+        * [required] a function
           - input:
             * the derived values as output from `inputSelectors`
           - output:
             * a derived value that is relatively __expensive__ to compute
+      - `options`
+        * [optional] an Object
+          - keys:
+            * `{equality}`
+          - values:
+            * key: `equality`
+              - value: a string, restricted to elements of the list: `['deep', 'shallow']`
+              - the default behavior is:
+                * neither of these options
+                * to use reference equality (`===`)
   - output:
     * a function
       - when invoked:

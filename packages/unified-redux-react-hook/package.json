@@ -1,6 +1,6 @@
 {
   "name": "@warren-bank/unified-redux-react-hook",
-  "version": "01.00.05",
+  "version": "01.00.06",
   "main": "hook/unified-redux-react-hook.js",
   "description": "React custom hooks that enhance 'redux-react-hook' to unify Redux and React 'dispatch' methods with a common API.",
   "author": {
@@ -14,6 +14,7 @@
     "publish": "npm publish --access=public"
   },
   "dependencies": {
+    "@warren-bank/fast-equal": "^3.1.1",
     "react": "^16.12.0",
     "redux-react-hook": "^4.0.1"
   },
