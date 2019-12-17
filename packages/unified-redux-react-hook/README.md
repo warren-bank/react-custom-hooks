@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.6', which corresponds to git tag 'unified-redux-react-hook/v01.00.06' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.7', which corresponds to git tag 'unified-redux-react-hook/v01.00.07' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.6/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.7/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:
@@ -191,6 +191,12 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
      * [Babel standalone](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme.html)
      * [Webpack browser-build bundle](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/browser-build/2-demos/01%20-%20demo%20-%20redux%20state%20todos%20-%20react%20state%20theme/dist/index.html)
 
+#### Tests:
+
+1. [unit tests](https://warren-bank.github.io/react-custom-hooks/packages/unified-redux-react-hook/tests/mocha.html) that run in [Browser Mocha](https://mochajs.org/#running-mocha-in-the-browser)
+
+- - - -
+
 #### References:
 
 * `npm install `[`'redux-react-hook'`](https://github.com/facebookincubator/redux-react-hook)
@@ -205,6 +211,8 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 #### Video:
 
 * [React Conf 2018: Dan Abramov introduces Hooks](https://youtu.be/dpw9EHDh2bM)
+
+- - - -
 
 #### Legal:
 
