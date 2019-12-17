@@ -80,18 +80,7 @@
               equal = (a, b) => fastEqual(a, b, {shallow: false})
               break
             case 'shallow':
-              equal = (a, b) => {
-                // 'a' and 'b' are guaranteed to both be: Arrays, not equal by reference
-                // the user doesn't want to shallow compare 'a' and 'b'
-                // the user does want to shallow compare each element of both Arrays
-                if (a.length !== b.length) return false
-
-                let ok = true
-                for (let i=0; ok && (i < a.length); i++) {
-                  ok = fastEqual(a[i], b[i], {shallow: true})
-                }
-                return ok
-              }
+              equal = (a, b) => fastEqual(a, b, {shallow: true, depth: 2})
               break
           }
         }
