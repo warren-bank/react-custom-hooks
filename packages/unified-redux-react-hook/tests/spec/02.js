@@ -592,9 +592,9 @@ describe('createReduxSelector()', () => {
     )
   }
 
-  // ===============================================================================================
+  // =============================================================================================== only 1 render
 
-  it('Redux selectors ⇒ run official "reselect" demo, call signature: (...inputSelectors, resultFunc)', (done) => {
+  it('runs official "reselect" demo, call signature: (...inputSelectors, resultFunc)', (done) => {
     initReduxState()
     const Component = Components.expect_return_values
     const props = createSelectors(null, true)        // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
@@ -603,16 +603,16 @@ describe('createReduxSelector()', () => {
 
   // ===============================================================================================
 
-  it('Redux selectors ⇒ run official "reselect" demo, call signature: ([inputSelectors], resultFunc)', (done) => {
+  it('runs official "reselect" demo, call signature: ([inputSelectors], resultFunc)', (done) => {
     initReduxState()
     const Component = Components.expect_return_values
     const props     = createSelectors(null, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
     render(Component, {...props, done})
   })
 
-  // ===============================================================================================
+  // =============================================================================================== equality: reference
 
-  it('Redux selectors  ⇒ memoization: no input parameters, Redux state is not modified, reference equality', (done) => {
+  it('uses memoization: no input parameters, Redux state is not modified, reference equality', (done) => {
     initReduxState()
     const Component = Components.expect_memoInput_memoResult_updateReactState_noParams
     const props     = createSelectors(null, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
@@ -621,7 +621,7 @@ describe('createReduxSelector()', () => {
 
   // ===============================================================================================
 
-  it('Redux selectors  ⇒ memoization: no input parameters, Redux state is modified, reference equality', (done) => {
+  it('uses memoization: no input parameters, Redux state is modified, reference equality', (done) => {
     initReduxState()
     const Component = Components.expect_invalidateInput_memoResult_updateReduxState_noParams
     const props     = createSelectors(null, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
@@ -630,7 +630,7 @@ describe('createReduxSelector()', () => {
 
   // ===============================================================================================
 
-  it('Redux selectors  ⇒ memoization: has input parameters, Redux state is not modified, reference equality', (done) => {
+  it('uses memoization: has input parameters, Redux state is not modified, reference equality', (done) => {
     initReduxState()
     const Component = Components.expect_invalidateInput_memoResult_updateReactState_hasParams
     const props     = createSelectors(null, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
@@ -639,25 +639,79 @@ describe('createReduxSelector()', () => {
 
   // ===============================================================================================
 
-  it('Redux selectors  ⇒ memoization: has input parameters, Redux state is modified, reference equality', (done) => {
+  it('uses memoization: has input parameters, Redux state is modified, reference equality', (done) => {
     initReduxState()
     const Component = Components.expect_invalidateInput_memoResult_updateReduxState_hasParams
     const props     = createSelectors(null, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
     render(Component, {...props, done})
   })
 
-  // ===============================================================================================
+  // =============================================================================================== equality: shallow
 
-  it('Redux selectors  ⇒ memoization: has input parameters, Redux state is modified, shallow equality', (done) => {
+  it('uses memoization: no input parameters, Redux state is not modified, shallow equality', (done) => {
     initReduxState()
-    const Component = Components.expect_invalidateInput_memoResult_updateReduxState_hasParams
+    const Component = Components.expect_memoInput_memoResult_updateReactState_noParams
     const props     = createSelectors(true, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
     render(Component, {...props, done})
   })
 
   // ===============================================================================================
 
-  it('Redux selectors  ⇒ memoization: has input parameters, Redux state is modified, deep equality', (done) => {
+  it('uses memoization: no input parameters, Redux state is modified, shallow equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_invalidateInput_memoResult_updateReduxState_noParams
+    const props     = createSelectors(true, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // ===============================================================================================
+
+  it('uses memoization: has input parameters, Redux state is not modified, shallow equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_invalidateInput_memoResult_updateReactState_hasParams
+    const props     = createSelectors(true, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // ===============================================================================================
+
+  it('uses memoization: has input parameters, Redux state is modified, shallow equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_invalidateInput_memoResult_updateReduxState_hasParams
+    const props     = createSelectors(true, false)   // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // =============================================================================================== equality: deep
+
+  it('uses memoization: no input parameters, Redux state is not modified, deep equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_memoInput_memoResult_updateReactState_noParams
+    const props     = createSelectors(false, false)  // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // ===============================================================================================
+
+  it('uses memoization: no input parameters, Redux state is modified, deep equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_invalidateInput_memoResult_updateReduxState_noParams
+    const props     = createSelectors(false, false)  // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // ===============================================================================================
+
+  it('uses memoization: has input parameters, Redux state is not modified, deep equality', (done) => {
+    initReduxState()
+    const Component = Components.expect_invalidateInput_memoResult_updateReactState_hasParams
+    const props     = createSelectors(false, false)  // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
+    render(Component, {...props, done})
+  })
+
+  // ===============================================================================================
+
+  it('uses memoization: has input parameters, Redux state is modified, deep equality', (done) => {
     initReduxState()
     const Component = Components.expect_invalidateInput_memoResult_updateReduxState_hasParams
     const props     = createSelectors(false, false)  // {shopItemsSelector, taxPercentSelector, subtotalSelector, taxSelector, totalSelector, callCounter}
