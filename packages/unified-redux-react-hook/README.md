@@ -84,9 +84,9 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 - - - -
 
-#### Notes:
+#### API:
 
-* `useDispatch()`
+* `useDispatch()`<a name="api-use-dispatch"/>
   - input:
     * optional spread list of React dispatch function(s)
       - this is the preferred way to register React dispatch function(s)
@@ -97,7 +97,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
         * the global Redux store dispatch function
         * __all__ registered React dispatch function(s)
 
-* `addDispatch()`
+* `addDispatch()`<a name="api-add-dispatch"/>
   - input:
     * exactly one React dispatch function
       - it will __not__ be automatically unregistered, which could lead to memory leaks if you're not careful
@@ -105,13 +105,13 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - output:
     * the count of __all__ registered React functions
 
-* `removeDispatch()`
+* `removeDispatch()`<a name="api-remove-dispatch"/>
   - input:
     * exactly one React dispatch function, which is equal (by `===` reference equality) to one that had previously been passed to `addDispatch()`
   - output:
     * the count of __all__ registered React functions
 
-* `useReduxDispatch()`
+* `useReduxDispatch()`<a name="api-use-redux-dispatch"/>
   - input:
     * none
   - output:
@@ -119,7 +119,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - note:
     * alias for: `require('redux-react-hook').useDispatch`
 
-* `useReduxMappedState()`
+* `useReduxMappedState()`<a name="api-use-redux-mapped-state"/>
   - input:
     * function: `(state) => value`
   - output:
@@ -127,7 +127,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
   - note:
     * alias for: `require('redux-react-hook').useMappedState`
 
-* `createReduxSelector()`
+* `createReduxSelector()`<a name="api-create-redux-selector"/>
   - input:
     * `(...inputSelectors, resultFunc, options)`
       - `inputSelectors`
@@ -145,19 +145,17 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
             * a derived value that is relatively __expensive__ to compute
       - `options`
         * [optional] an Object
-          - keys:
-            * `{equality}`
-          - values:
-            * key: `equality`
-              - value: a string, restricted to elements of the list: `['deep', 'shallow']`
-              - the default behavior is:
-                * neither of these options
-                * to use reference equality (`===`)
+          - key: `equality`
+            * value: a string, restricted to elements of the list: `['deep', 'shallow']`
+            * the default behavior is:
+              - neither of these options
+              - to use reference equality (`===`)
   - output:
     * a function
       - when invoked:
         * any parameters passed into this function will also be passed as input parameters to all `inputSelectors` following the Redux state
         * all `inputSelectors` are invoked to obtain the corresponding list of derived values
+          - note: `inputSelectors` are memoized and only execute when either the global Redux state changes, or the value of any input parameter changes
         * `resultFunc` is invoked
           - note: `resultFunc` is memoized and only executes when its input parameters change
   - references:
@@ -166,11 +164,36 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
     * `createReduxSelector()` can be called outside of a React component's render function
       - however, the function it creates must only be called inside of a React component's render function
     * same as the default behavior for `require('reselect').createSelector`
-      - reference equality (`===`) is used to determine if the value returned by an input-selector has changed between calls
+      - reference equality (`===`) is the default behavior used to determine if the value returned by an input-selector has changed between calls
     * though one or more `inputSelectors` should be considered required
       - the fallback behavior when none are provided<br>is to create a function that is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
+  - efficiency considerations:
+    * on 1st render of React component:
+      - all `inputSelectors` execute
+      - `resultFunc` executes
+    * on subsequent renders of React component:
+      - all `inputSelectors` are memoized
+        * cache of each corresponding result value is invalidated under any of the following circumstances:
+          - global Redux `state` is changed
+          - one or more values in the list of input parameters is changed
+      - `resultFunc` is memoized
+        * cache of the result value is invalidated when:
+          - one or more values in the list of input parameters is changed
+            * this list of input parameters is the ordered list of output values as produced by the `inputSelectors`
+            * how _change_ is determined can be configured in _options_
+              * by default, equality is determined by reference
+              * when _options_ contains `{equality: 'shallow'}`, equality is also determined by reference.. such that:
+                - top-level Objects and Arrays do not need to be equal by reference
+                - top-level Objects and Arrays must contain children that are __all__ equal by reference
+              * when _options_ contains `{equality: 'deep'}`, equality is determined.. such that:
+                - Objects and Arrays at any depth within the data structure do not need to be equal by reference
+                - Objects and Arrays at any depth within the data structure must contain children that are either:
+                  * an Object or Array
+                  * a data type that can be converted to a primitive value and compared for equality
+  - examples:
+    * [unit tests](https://github.com/warren-bank/react-custom-hooks/blob/master/packages/unified-redux-react-hook/tests/spec/02.js#L73)
 
-* `StoreContext`
+* `StoreContext`<a name="api-store-context"/>
   - type:
     * React context
       - ie: as output by `React.createContext()`
