@@ -178,6 +178,9 @@
           if (equalityFunction === equalityFunctions.shallow_d2)
             equalityFunction = equalityFunctions.shallow_d1
         }
+        else {
+          equalityFunction = undefined
+        }
 
         result = useReduxMappedState(useCallback(resultFunc, []), equalityFunction)
       }
