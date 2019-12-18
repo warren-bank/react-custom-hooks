@@ -2,7 +2,7 @@
  * https://github.com/facebookincubator/redux-react-hook
  */
 
-{
+describe('useDispatch()', () => {
   const expect        = require('expect')
   const {createStore} = require('redux')
   const React         = require('react')
@@ -171,4 +171,4 @@
     run_timer()
   }).timeout(21000)
 
-}
+})

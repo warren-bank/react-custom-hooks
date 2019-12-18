@@ -2,7 +2,7 @@
  * https://github.com/facebookincubator/redux-react-hook
  */
 
-{
+describe('createReduxSelector()', () => {
   const expect        = require('expect')
   const {createStore} = require('redux')
   const React         = require('react')
@@ -665,4 +665,4 @@
   })
 
   // ===============================================================================================
-}
+})
