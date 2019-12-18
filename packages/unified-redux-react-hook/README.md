@@ -68,10 +68,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 ```html
   <!-- dependency: React must be loaded before bundle -->
-  <!-- version:    bundle is obtained from npm @ semantic version '1.0.9', which corresponds to git tag 'unified-redux-react-hook/v01.00.09' -->
+  <!-- version:    bundle is obtained from npm @ semantic version '1.0.10', which corresponds to git tag 'unified-redux-react-hook/v01.00.10' -->
 
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.9/dist/unified-redux-react-hook.min.js"></script>
+  <script src="https://unpkg.com/@warren-bank/unified-redux-react-hook@1.0.10/dist/unified-redux-react-hook.min.js"></script>
 ```
 
 #### Usage:
@@ -145,11 +145,49 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
             * a derived value that is relatively __expensive__ to compute
       - `options`
         * [optional] an Object
-          - key: `equality`
-            * value: a string, restricted to elements of the list: `['deep', 'shallow']`
-            * the default behavior is:
-              - neither of these options
-              - to use reference equality (`===`)
+          1. key: `equality`
+             * type: Object || String || Number || null
+               - Object:
+                 1. shape:
+                    ```javascript
+                      {
+                        equality: {
+                          forceUpdate: [],
+                          recalculate: ''
+                        }
+                      }
+                    ```
+                 2. key: `forceUpdate`
+                    - an Array of: String || Integer || null
+                      * length of Array should match the number of `inputSelectors`
+                        - each value in the Array corresponds to one `inputSelector`
+                      * all `inputSelectors` execute every time the global Redux state changes
+                      * the previous result of each `inputSelector` is compared to the new result
+                      * if the values are determined to be different, then the React component will re-render
+                      * the purpose of this value is to configure how equality is determined
+                        1. `null` represents the default behavior, which is to compare values by strict reference equality (`===`)
+                        2. valid String values include: `'deep'` and `'shallow'`
+                           * see: [efficiency considerations](#user-content-api-create-redux-selector-efficiency-considerations)
+                        3. an Integer value results in a `'shallow'` comparison that is allowed to recurse up to the specified maximum depth
+                    - shortcut: String || Integer || null
+                      * this value is applied to all `inputSelectors`
+                    - default value: null
+                 3. key: `recalculate`
+                    - String || Integer || null
+                      * the results of all `inputSelectors` are determined every time the React component renders
+                        - note: `inputSelectors` are memoized and only execute when either the global Redux state changes, or the value of any input parameter changes
+                      * the previous results are compared to the new results
+                      * if the values are determined to be different, then `resultFunc` will execute
+                        - otherwise, the memoized result is reused
+                      * the purpose of this value is to configure how equality is determined
+                        1. `null` represents the default behavior, which is to compare values by strict reference equality (`===`)
+                        2. valid String values include: `'deep'` and `'shallow'`
+                           * see: [efficiency considerations](#user-content-api-create-redux-selector-efficiency-considerations)
+                        3. an Integer value results in a `'shallow'` comparison that is allowed to recurse up to the specified maximum depth
+                    - default value: null
+               - String || Number || null:
+                 * shortcut:
+                   - this value is applied to `forceUpdate` and `recalculate`
   - output:
     * a function
       - when invoked:
@@ -167,7 +205,7 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
       - reference equality (`===`) is the default behavior used to determine if the value returned by an input-selector has changed between calls
     * though one or more `inputSelectors` should be considered required
       - the fallback behavior when none are provided<br>is to create a function that is roughly equivalent to:<br>`(...ignored) => useReduxMappedState(resultFunc)`
-  - efficiency considerations:
+  - efficiency considerations:<a name="api-create-redux-selector-efficiency-considerations"/>
     * on 1st render of React component:
       - all `inputSelectors` execute
       - `resultFunc` executes
@@ -182,10 +220,10 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
             * this list of input parameters is the ordered list of output values as produced by the `inputSelectors`
             * how _change_ is determined can be configured in _options_
               * by default, equality is determined by reference
-              * when _options_ contains `{equality: 'shallow'}`, equality is also determined by reference.. such that:
+              * when `options.equality.recalculate === 'shallow'`, equality is also determined by reference.. such that:
                 - top-level Objects and Arrays do not need to be equal by reference
                 - top-level Objects and Arrays must contain children that are __all__ equal by reference
-              * when _options_ contains `{equality: 'deep'}`, equality is determined.. such that:
+              * when `options.equality.recalculate === 'deep'`, equality is determined.. such that:
                 - Objects and Arrays at any depth within the data structure do not need to be equal by reference
                 - Objects and Arrays at any depth within the data structure must contain children that are either:
                   * an Object or Array

@@ -60,28 +60,70 @@
     return unifiedDispatcher
   }
 
+  const equalityFunctions = {
+    deep:       (a, b) => fastEqual(a, b, {shallow: false}),
+    shallow_d1: (a, b) => fastEqual(a, b, {shallow: true, depth: 1}),
+    shallow_d2: (a, b) => fastEqual(a, b, {shallow: true, depth: 2})
+  }
+
   const createReduxSelector = (...selectorFunctions) => {
     // https://github.com/reduxjs/reselect#api
 
     const reduxSelectorProperty = 'UnifiedReduxReactHook_ReduxSelector'
 
-    let equal = null
+    const equality = {
+      forceUpdate: null,
+      recalculate: null
+    }
 
     if (selectorFunctions && selectorFunctions.length) {
-      let lastArg = selectorFunctions[selectorFunctions.length - 1]
+      let options = selectorFunctions[selectorFunctions.length - 1]
 
-      if (typeof lastArg === 'object') {
+      if (options && (typeof options === 'object')) {
         // remove value so it isn't processed within the `reduxSelector` as an `arg`
         selectorFunctions.pop()
 
-        if (typeof lastArg.equality === 'string') {
-          switch (lastArg.equality.toLowerCase()) {
-            case 'deep':
-              equal = (a, b) => fastEqual(a, b, {shallow: false})
-              break
-            case 'shallow':
-              equal = (a, b) => fastEqual(a, b, {shallow: true, depth: 2})
-              break
+        if (options.equality) {
+          if ((typeof options.equality === 'string') || (typeof options.equality === 'number'))
+            options.equality = {forceUpdate: options.equality, recalculate: options.equality}
+
+          if (typeof options.equality === 'object') {
+            if ((typeof options.equality.forceUpdate === 'string') || (typeof options.equality.forceUpdate === 'number'))
+              options.equality.forceUpdate = selectorFunctions.map(() => options.equality.forceUpdate)
+
+            if (Array.isArray(options.equality.forceUpdate)) {
+              let count = selectorFunctions.length - 1
+
+              if (count > 0)
+                equality.forceUpdate = []
+
+              for (let i=0; i < count; i++) {
+                if (i >= options.equality.forceUpdate.length)
+                  equality.forceUpdate[i] = null
+                else if (typeof options.equality.forceUpdate[i] === 'number')
+                  equality.forceUpdate[i] = (a, b) => fastEqual(a, b, {shallow: true, depth: parseInt(options.equality.forceUpdate[i])})
+                else if (typeof options.equality.forceUpdate[i] !== 'string')
+                  equality.forceUpdate[i] = null
+                else if (options.equality.forceUpdate[i].toLowerCase() === 'deep')
+                  equality.forceUpdate[i] = equalityFunctions.deep
+                else if (options.equality.forceUpdate[i].toLowerCase() === 'shallow')
+                  equality.forceUpdate[i] = equalityFunctions.shallow_d1
+                else
+                  equality.forceUpdate[i] = null
+              }
+            }
+
+            if (typeof options.equality.recalculate === 'number') {
+              equality.recalculate = (a, b) => fastEqual(a, b, {shallow: true, depth: parseInt(options.equality.recalculate)})
+            }
+            if (typeof options.equality.recalculate === 'string') {
+              options.equality.recalculate = options.equality.recalculate.toLowerCase()
+
+              if (options.equality.recalculate === 'deep')
+                equality.recalculate = equalityFunctions.deep
+              else if (options.equality.recalculate === 'shallow')
+                equality.recalculate = equalityFunctions.shallow_d2
+            }
           }
         }
       }
@@ -114,7 +156,8 @@
             // 'inputSelectorValue' [derived value] is memoized on its 'state' input parameter; 'inputSelector' is only re-run when 'state' changes. The memoized result is returned during render until 'state' changes.
 
             let inputSelector      = useCallback(state => arg(state, ...params), params)
-            let inputSelectorValue = useReduxMappedState(inputSelector)
+            let equalityFunction   = (Array.isArray(equality.forceUpdate) && (typeof equality.forceUpdate[i] === 'function')) ? equality.forceUpdate[i] : undefined
+            let inputSelectorValue = useReduxMappedState(inputSelector, equalityFunction)
 
             inputSelectorValues.push(inputSelectorValue)
           }
@@ -126,15 +169,23 @@
 
       let result
       if (!inputSelectorValues.length) {
-        if (typeof equal === 'function') {
+        let equalityFunction = equality.recalculate
+
+        if (typeof equalityFunction === 'function') {
           prevInputSelectorValues.current = []
+
+          // adjust depth of 'shallow' preset
+          if (equalityFunction === equalityFunctions.shallow_d2)
+            equalityFunction = equalityFunctions.shallow_d1
         }
 
-        result = useReduxMappedState(useCallback(resultFunc, []))
+        result = useReduxMappedState(useCallback(resultFunc, []), equalityFunction)
       }
       else {
-        if (typeof equal === 'function') {
-          if (equal(prevInputSelectorValues.current, inputSelectorValues)) {
+        let equalityFunction = equality.recalculate
+
+        if (typeof equalityFunction === 'function') {
+          if (equalityFunction(prevInputSelectorValues.current, inputSelectorValues)) {
             // force memoized reference equality
             inputSelectorValues = prevInputSelectorValues.current
           }
