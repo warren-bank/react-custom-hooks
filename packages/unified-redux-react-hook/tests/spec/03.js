@@ -137,6 +137,10 @@ describe('createReduxSelector(...continued)', () => {
         eval(compileJSX(`
           <table style={styles.table}>
             <tr>
+              <td>App render count:</td>
+              <td style={styles.td2}>{props.renderCount}</td>
+            </tr>
+            <tr>
               <td>Component render count:</td>
               <td style={styles.td2}>{actualRenderCount}</td>
             </tr>
@@ -190,7 +194,7 @@ describe('createReduxSelector(...continued)', () => {
 
   it('uses memoization: same as previous test w/ performance optimizations', (done) => {
     // https://github.com/facebookincubator/redux-react-hook/issues/80
-    // https://codesandbox.io/s/elastic-flower-q88pm
+    // https://codesandbox.io/s/dawn-mountain-b562n
 
     let selectorExecCount = 0;
     let actualRenderCount = 0;
@@ -275,6 +279,10 @@ describe('createReduxSelector(...continued)', () => {
       return (
         eval(compileJSX(`
           <table style={styles.table}>
+            <tr>
+              <td>App render count:</td>
+              <td style={styles.td2}>{renderCount}</td>
+            </tr>
             <tr>
               <td>Component render count:</td>
               <td style={styles.td2}>{actualRenderCount}</td>
