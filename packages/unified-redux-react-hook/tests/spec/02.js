@@ -18,6 +18,9 @@ describe('createReduxSelector()', () => {
     container = document.createElement('div')
     containerParent.appendChild(container)
 
+    container.style.marginLeft = "45px"
+    container.style.marginTop  = "15px"
+
     const reduxReducer = (state = {}, action) => {
       if (action.type === 'nonce') {
         let new_val = (action.payload) ? action.payload    :
