@@ -1,0 +1,29 @@
+<html>
+<head>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    // https://github.com/babel/babel-standalone/tree/release-6.26.0#usage
+    const transform = window.Babel.transform
+
+    const msg = 'hello world!'
+    const jsx = `<div>{msg}</div>`
+
+    const code = transform(jsx, { presets: ['es2015', 'react'] }).code
+    console.log((typeof code) + ":\n", code)
+
+    const Component = eval(code)
+    console.log((typeof Component) + ":\n", Component)
+
+    ReactDOM.render(
+      Component,
+      document.getElementById('root')
+    )
+  </script>
+</body>
+</html>

@@ -9,6 +9,7 @@
       #mocha-report li > h2 {font-size: 20px}
     </style>
 
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/redux@4/dist/redux.min.js"></script>
@@ -17,8 +18,23 @@
         switch (module) {
           case 'expect':
             return window.chai.expect
-          case 'jsxdirect':
-            return window.jsxdirect
+          case 'compile-jsx':
+            return (jsx, do_eval) => {
+              if (!jsx || (typeof jsx !== 'string')) return null
+
+              const transform = window.Babel.transform
+              const code      = transform(jsx, { presets: ['es2015', 'react'] }).code
+
+              if (do_eval) {
+                // note: code in {} may reference variables that are not in scope
+                const Component = eval(code)
+                return Component
+              }
+              else {
+                // note: caller will need to call `eval()`, which will interpolate variables that are within scope
+                return code
+              }
+            }
           case 'redux':
             return window.Redux
           case 'react':
@@ -75,6 +91,7 @@
     </script>
     <script src="spec/01.js"></script>
     <script src="spec/02.js"></script>
+    <script src="spec/03.js"></script>
     <script class="mocha-exec">
       mocha.run();
     </script>
@@ -88,6 +105,7 @@ References:
 Dependencies:
   https://unpkg.com/browse/mocha@6.2.2/
   https://unpkg.com/browse/chai@4.2.0/
+  https://unpkg.com/browse/@babel/standalone@7.7.7/
   https://unpkg.com/browse/react@16.12.0/umd/
   https://unpkg.com/browse/react-dom@16.12.0/umd/
   https://unpkg.com/browse/redux@4.0.4/dist/

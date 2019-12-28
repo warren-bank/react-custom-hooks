@@ -260,8 +260,9 @@ React custom hooks that enhance ['redux-react-hook'](https://github.com/facebook
 
 #### References:
 
-* `npm install `[`'redux-react-hook'`](https://github.com/facebookincubator/redux-react-hook)
-  - [issue to pitch the original idea..](https://github.com/facebookincubator/redux-react-hook/issues/78)
+* ['redux-react-hook'](https://github.com/facebookincubator/redux-react-hook)
+  - [issue to pitch idea for: `useDispatch()`](https://github.com/facebookincubator/redux-react-hook/issues/78)
+  - [issue to pitch idea for: `createReduxSelector()`](https://github.com/facebookincubator/redux-react-hook/issues/80)
 
 #### Docs:
 

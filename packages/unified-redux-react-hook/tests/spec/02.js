@@ -26,8 +26,11 @@ describe('createReduxSelector()', () => {
 
         return {...state, nonce: new_val}
       }
-      else {
+      else if (action.payload) {
         return action.payload
+      }
+      else {
+        return state
       }
     }
     reduxStore = createStore(reduxReducer)
