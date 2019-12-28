@@ -114,6 +114,9 @@ describe('useDispatch()', () => {
   beforeEach(() => {
     container = document.createElement('div')
     containerParent.appendChild(container)
+
+    container.style.marginLeft = "45px"
+    container.style.marginTop  = "15px"
   })
 
   afterEach(() => {

@@ -12,12 +12,26 @@ describe('createReduxSelector(...continued)', () => {
 
   // ===============================================================================================
 
+  const styles = {
+    container: {marginLeft: "45px", marginTop: "15px"},
+    table:     {borderStyle: "solid"},
+    td2:       {paddingLeft: "1.5em", textAlign: "right"}
+  }
+
+  // ===============================================================================================
+
   const containerParent = document.getElementById('mocha')
   let container, reduxStore
 
   beforeEach(() => {
     container = document.createElement('div')
     containerParent.appendChild(container)
+
+    if (styles.container) {
+      for (let key in styles.container) {
+        container.style[key] = styles.container[key]
+      }
+    }
 
     const reduxReducer = (state = {}, action) => action.payload || state
     reduxStore = createStore(reduxReducer)
@@ -40,6 +54,7 @@ describe('createReduxSelector(...continued)', () => {
     // https://codesandbox.io/s/elastic-flower-q88pm
 
     let selectorExecCount = 0;
+    let actualRenderCount = 0;
     let timer = null;
 
     const finish = (err) => {
@@ -50,7 +65,7 @@ describe('createReduxSelector(...continued)', () => {
 
     const selector = createReduxSelector(
       (state, props) => {
-        return props.msg || "I did , did I";
+        return props.msg || 'I did , did I';
       },
       (state, props) => {
         // debounce count: increment once for every 3 ticks
@@ -60,19 +75,19 @@ describe('createReduxSelector(...continued)', () => {
         return count;
       },
       (state, props) => {
-        console.log("React props:", props);
-        console.log("Redux state:", JSON.stringify(state));
+        console.log(('-').repeat(40))
+        console.log('React props:', props);
+        console.log('Redux state:', JSON.stringify(state));
       },
       (msg, count) => {
         selectorExecCount++;
-        console.log("msg:", msg);
-        console.log("count:", count);
+        console.log('selector() executing:', JSON.stringify({msg, count}));
 
         // reverse string
-        let rev_msg = msg
-          .split("")
+        const rev_msg = msg
+          .split('')
           .reverse()
-          .join("");
+          .join('');
 
         return { rev_msg, count };
       },
@@ -80,24 +95,34 @@ describe('createReduxSelector(...continued)', () => {
     );
 
     const Component = props => {
+      actualRenderCount++
+
+      console.log(('-').repeat(40))
+      console.log('React component rendering..')
+
       const { rev_msg, count } = selector(props);
-      console.log("rev_msg:", rev_msg);
-      console.log("count:", count);
+      console.log('selector().rev_msg:', rev_msg);
+
+      console.log('selector().count:', count)
+      console.log('props.renderCount:', props.renderCount)
+      console.log('actualRenderCount:', actualRenderCount)
 
       const dispatch = useDispatch();
 
       React.useEffect(() => {
-        let new_state = { count: props.renderCount };
+        const new_state = { count: props.renderCount };
         dispatch({ type: "*", payload: new_state });
       }, [dispatch, props.renderCount]);
 
       try {
-        let val1 = parseInt((props.renderCount - 1) / 3)
-        let val2 = parseInt(props.renderCount / 3)
+        const val1 = parseInt((props.renderCount - 1) / 3)
+        const val2 = parseInt(props.renderCount / 3)
         expect([val1, val2]).to.include(count)
         expect (selectorExecCount).to.equal(count + 1)
+        expect (actualRenderCount).to.equal(props.renderCount + count)
       }
       catch(err) {
+        console.log(('-').repeat(40))
         console.log(err)
         finish(err)
         return null
@@ -110,14 +135,28 @@ describe('createReduxSelector(...continued)', () => {
 
       return (
         eval(compileJSX(`
-          <>
-            <h2>{rev_msg}</h2>
-            <div className="counters">
-              <div>Component render count: {props.renderCount}</div>
-              <div>Debounced render count: {count}</div>
-              <div>Selector execution count: {selectorExecCount}</div>
-            </div>
-          </>
+          <table style={styles.table}>
+            <tr>
+              <td>Component render count:</td>
+              <td style={styles.td2}>{actualRenderCount}</td>
+            </tr>
+            <tr>
+              <td><li>Renders due to updated React props:</li></td>
+              <td style={styles.td2}>{props.renderCount}</td>
+            </tr>
+            <tr>
+              <td><li>Renders due to updated Redux selector:</li></td>
+              <td style={styles.td2}>{count}</td>
+            </tr>
+            <tr>
+              <td>Debounced render count:</td>
+              <td style={styles.td2}>{count}</td>
+            </tr>
+            <tr>
+              <td>Selector execution count:</td>
+              <td style={styles.td2}>{selectorExecCount}</td>
+            </tr>
+          </table>
         `))
       );
     };
